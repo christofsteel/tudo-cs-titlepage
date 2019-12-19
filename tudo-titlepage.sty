@@ -1,0 +1,117 @@
+%<@@=tudo-cs-tutlepage>
+\NeedsTeXFormat{LaTeX2e}
+\RequirePackage{expl3}
+\RequirePackage{l3keys2e}
+\ProvidesExplPackage{tudo-cs-titlepage}{2019-12-19}{1.0}{Titlepage for Thesises in the Computer Science Faculty of the TU Dortmund University}
+\RequirePackage[pass]{geometry}
+\RequirePackage{xcolor}
+\RequirePackage{graphicx}
+\RequirePackage[absolute]{textpos}
+
+\keys_define:nn { tudo-cs-titlepage }
+  {
+      author .
+  }
+
+% Exported command: \tudotitlepage
+% Variablen:
+%   * author
+%   * title
+%   * date
+%   * thesistype
+%   * supervisors
+%   * institute
+%   * cooperation
+%   * logo
+%   * boxcolor 
+% Language specific variables:
+%   * supervisorstring
+%   * cooperationstring
+% Flags
+%   * showbox
+
+\newif\ifcoop
+\coopfalse
+\def\tudo@language{english}
+
+\DeclareOption{cooperation}{%
+    \cooptrue
+}
+\DeclareOption{german}{%
+\def\tudo@language{german}
+}
+\DeclareOption{ngerman}{%
+\def\tudo@language{german}
+}
+
+\ProcessOptions\relax
+%\@ifpackagewith{babel}{ngerman}{\def\@Language=german}{}
+%\@ifpackagewith{polyglosia}{german}{\def\@Language=german}{}
+
+
+\definecolor{TUgreen}{RGB}{132,184,24}
+
+\newcommand{\thethesistype}{Thesis}
+\newcommand{\thesupervisorstring}{Supervisors}
+\newcommand{\theuniversitybox}{}
+\newcommand{\thecooperationbox}{}
+\newcommand{\thesupervisors}{}
+\newcommand{\thetudologo}{\includegraphics[width=8cm]{tud_logo_rgba}\\[\fill]}
+
+\newcommand{\thesistype}[1]{\renewcommand{\thethesistype}{#1}}
+\newcommand{\supervisorstring}[1]{\renewcommand{\thesupervisorstring}{#1}}
+\newcommand{\universitybox}[1]{\renewcommand{\theuniversitybox}{#1}}
+\newcommand{\cooperationbox}[1]{\renewcommand{\thecooperationbox}{#1}}
+\newcommand{\supervisors}[1]{\renewcommand{\thesupervisors}{#1}}
+\newcommand{\tudologo}[1]{\renewcommand{\thetodologo}{#1}}
+
+\ifx\tudo@language\string{german}
+    \thesistype{Abschlussarbeit}\supervisorstring{Betreuer}
+\fi
+\ifx\tudo@language\string{english}
+    \thesistype{Asssbschlussarbeit}\supervisorstring{Bdddetreuer}
+\fi
+
+
+\newcommand{\tudotitlepage}{%
+\begin{titlepage}
+\linespread{1.25}\selectfont
+\newgeometry{left=2.7cm,top=1.4cm,right=2.7cm,bottom=3cm}
+\sffamily
+%\begin{textblock*}{8.9cm}(3cm,5.4cm)
+\begin{textblock*}{9.1cm}(2.9cm,5.3cm)
+\textblockcolour{TUgreen!15}
+\noindent
+\centering
+\begin{minipage}[t][8.8cm][c]{8.7cm}    
+%\begin{minipage}[t][8.9cm][c]{8.5cm}
+\centering
+\large
+{\Large \thethesistype}\\[1cm]
+\textbf{\@title}\\[1cm]
+\@author\\
+\@date
+\end{minipage}
+\end{textblock*}
+\noindent\thetudologo
+\vspace{15cm}
+
+\noindent\begin{minipage}{.55\textwidth}
+    \thesupervisorstring:\\
+    \thesupervisors
+\end{minipage}
+\vfill
+\noindent\begin{minipage}[t]{.55\textwidth}
+\theuniversitybox\\
+\end{minipage}\hfill
+\ifcoop
+\begin{minipage}[t]{.45\textwidth}
+\raggedleft
+In Kooperation mit:\\
+\thecooperationbox
+\end{minipage}
+\fi
+\end{titlepage}
+\restoregeometry
+}
+\endinput

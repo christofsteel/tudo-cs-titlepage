@@ -1,0 +1,36 @@
+\documentclass[paper=a4,fontsize=11pt,BCOR=20mm,toc=bib,twoside, DIV=12, headsepline, open=right,ngerman,rgb,listof=totoc]{scrreprt}
+\usepackage[ngerman]{babel}
+\usepackage{csquotes}
+\usepackage{hyperref}
+\usepackage[backend=biber]{biblatex}
+\usepackage[cooperation,german]{tudo-titlepage}
+
+\usepackage{blindtext}
+
+\title{Testarbeit}
+\author{Christoph Stahl}
+\thesistype{Bachelorarbeit}
+\supervisors{Prof.\,Dr.\,Erst Gutachter\\Zweit Gutachter, M.\,Sc.}
+\universitybox{Technische Universität Dortmund\\Fakultät für Informatik\\Lehrstuhl für angewandte Chaostheorie (LS-9)\\\url{https://ls9-www.tu-dortmund.de/}}
+\cooperationbox{Lokale Software Schmiede GmbH\\\url{https://lokalesoftwareschmiede.de}}
+
+\begin{document}
+\tudotitlepage
+
+\pagenumbering{roman}
+\tableofcontents
+\cleardoubleemptypage
+
+\pagenumbering{arabic}
+\chapter{Introduction}
+\blindtext
+\chapter{Theoretical Background}
+\blindtext
+\chapter{Experiments}
+\blindtext
+\chapter{Evaluation}
+\blindtext
+\chapter{Conclusion}
+\blindtext
+
+\end{document}
