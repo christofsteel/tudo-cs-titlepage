@@ -1,0 +1,149 @@
+%<@@=tudo-cs-tutlepage>
+\NeedsTeXFormat{LaTeX2e}
+\RequirePackage{expl3}
+\RequirePackage{l3keys2e}
+\ProvidesExplPackage{tudo-cs-titlepage}{2019-12-19}{1.0}{Titlepage for Thesises in the Computer Science Faculty of the TU Dortmund University}
+\RequirePackage{xparse}
+\RequirePackage[pass]{geometry}
+\RequirePackage{xcolor}
+\RequirePackage{graphicx}
+\RequirePackage[absolute]{textpos}
+\RequirePackage{tikz}
+
+\keys_define:nn { tudocstitlepage }
+  {
+      showcooperation .bool_set:N = \l__tudocstitlepage_showcooperation_bool,
+      boxcolor .tl_set:N = \l__tudocstitlepage_boxcolor_tl,
+      hidebox .bool_set:N = \l__tudocstitlepage_hidebox_bool,
+      language .choice:,
+      language / german .tl_set:N = \l__tudocstitlepage_language_tl,
+      language / english .tl_set:N = \l__tudocstitlepage_language_tl,
+  }
+
+\@ifpackagewith{babel}{ngerman}{\tl_set:Nn \l__tudocstitlepage_language_tl {german}}{}
+\@ifpackagewith{polyglossia}{german}{\tl_set:Nn \l__tudocstitlepage_language_tl {german}}{}
+
+  \ProcessKeysOptions{ tudocstitlepage }
+
+
+%\tl_if_eq:NNTF \l__tudocstitlepage_boxcolor_tl\c_empty_tl{\tl_set:Nn \l__tudocstitlepage_boxcolor_tl {edf4dc}}{}
+\str_if_empty:NTF \l__tudocstitlepage_boxcolor_tl{\tl_set:Nn \l__tudocstitlepage_boxcolor_tl {edf4dc}}{}
+
+\definecolor{BoxColor}{HTML}{\l__tudocstitlepage_boxcolor_tl}
+
+
+\str_new:N \l__tudocstitlepage_thesistype_str
+\seq_new:N \l__tudocstitlepage_supervisors_seq
+\tl_new:N \l__tudocstitlepage_institute_tl
+\tl_new:N \l__tudocstitlepage_cooperation_tl
+\str_new:N \l__tudocstitlepage_supervistorstring_str
+\str_new:N \l__tudocstitlepage_cooperationstring_str
+\tl_new:N \l__tudocstitlepage_logo_tl
+
+\DeclareDocumentCommand \setLogo { m }
+  {
+      \tl_set:Nn \l_tudocstitlepage_logo_tl {#1}
+  }
+
+\DeclareDocumentCommand \thesistype { m }
+  {
+      \str_set:Nn \l__tudocstitlepage_thesistype_str {#1}
+  }
+
+\DeclareDocumentCommand \addSupervisor { m }
+  {
+      \seq_put_right:Nn \l__tudocstitlepage_supervisors_seq {#1}
+  }
+
+\DeclareDocumentCommand \institute { m }
+  {
+      \tl_set:Nn \l__tudocstitlepage_institute_tl {#1}
+  }
+
+\DeclareDocumentCommand \cooperation { m }
+  {
+      \tl_set:Nn \l__tudocstitlepage_cooperation_tl {#1}
+  }
+
+\DeclareDocumentCommand \setSupervisorstring { m }
+  {
+      \str_set:Nn \l__tudocstitlepage_supervisorstring_str {#1}
+  }
+
+\DeclareDocumentCommand \setCooperationstring { m }
+  {
+      \str_set:Nn \l__tudocstitlepage_cooperationstring_str {#1}
+  }
+
+
+\str_if_eq:VnTF {\l__tudocstitlepage_language_tl} {german} {
+    \thesistype{Abschlussarbeit}
+    \setSupervisorstring{Betreuer}
+    \setCooperationstring{In~Kooperation~mit}
+}{}
+\str_if_eq:VnTF {\l__tudocstitlepage_language_tl} {english} {
+    \thesistype{Thesis}
+    \setSupervisorstring{Supervisors}
+    \setCooperationstring{In~cooperation~with}
+}{}
+\setLogo{\includegraphics[width=8cm]{tud_logo_rgba}\\[\fill]}
+
+\newcommand{\tikztitlepage}{%
+    \begin{titlepage}
+        \begin{tikzpicture}[overlay, remember picture]
+            \coordinate (0) at (current page.south west);
+            \draw [fill=red] (0,0) rectangle (20, 20);
+        \end{tikzpicture}
+    \end{titlepage}
+}
+
+\newcommand{\tudotitlepage}{%
+    \begin{titlepage}
+        \linespread{1.25}\selectfont
+        \newgeometry{left=2.7cm,top=1.4cm,right=2.7cm,bottom=3cm}
+        \sffamily
+
+
+
+        %\begin{textblock*}{8.9cm}(3cm,5.4cm)
+        \begin{textblock*}{9.1cm}(2.9cm,5.3cm)
+            \bool_if:NTF \l__tudocstitlepage_hidebox_bool {}{%
+                \textblockcolour{BoxColor}
+            }
+            \noindent
+            \centering
+            \begin{minipage}[t][8.8cm][c]{8.7cm}    
+                %\begin{minipage}[t][8.9cm][c]{8.5cm}
+                \centering
+                \large
+                {\Large \l__tudocstitlepage_thesistype_str}\\[1cm]
+                \textbf{\@title}\\[1cm]
+                \@author\\
+                \@date
+            \end{minipage}
+        \end{textblock*}
+        \noindent \tl_use:N \l__tudocstitlepage_logo_tl
+        %\vspace{15cm}
+        \vfill
+        \noindent\begin{minipage}{.55\textwidth}
+            \l__tudocstitlepage_supervisorstring_str :\\
+            \seq_map_inline:Nn \l__tudocstitlepage_supervisors_seq
+              {
+                  ##1\\
+              }
+        \end{minipage}
+        \vfill
+        \noindent\begin{minipage}[t]{.55\textwidth}
+            \l__tudocstitlepage_institute_tl
+        \end{minipage}\hfill
+        \bool_if:NTF\l__tudocstitlepage_showcooperation_bool{
+            \begin{minipage}[t]{.45\textwidth}
+                \raggedleft
+                \l__tudocstitlepage_cooperationstring_str :\\
+                \l__tudocstitlepage_cooperation_tl
+            \end{minipage}
+        }{}
+    \end{titlepage}
+    \restoregeometry
+}
+\endinput

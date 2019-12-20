@@ -3,16 +3,28 @@
 \usepackage{csquotes}
 \usepackage{hyperref}
 \usepackage[backend=biber]{biblatex}
-\usepackage[cooperation,german]{tudo-titlepage}
+\usepackage[%
+    showcooperation=true,%
+    language=english,
+    ]{tudo-cs-titlepage}
 
 \usepackage{blindtext}
 
 \title{Testarbeit}
 \author{Christoph Stahl}
 \thesistype{Bachelorarbeit}
-\supervisors{Prof.\,Dr.\,Erst Gutachter\\Zweit Gutachter, M.\,Sc.}
-\universitybox{Technische Universität Dortmund\\Fakultät für Informatik\\Lehrstuhl für angewandte Chaostheorie (LS-9)\\\url{https://ls9-www.tu-dortmund.de/}}
-\cooperationbox{Lokale Software Schmiede GmbH\\\url{https://lokalesoftwareschmiede.de}}
+\addSupervisor{Prof.\,Dr.\,Erst Gutachter}
+\addSupervisor{Zweit Gutachter, M.\,Sc.}
+\institute{%
+    Technische Universität Dortmund\\
+    Fakultät für Informatik\\
+    Lehrstuhl für angewandte Chaostheorie (LS-9)\\
+    \url{https://ls9-www.cs.tu-dortmund.de/}
+}
+\cooperation{%
+    Lokale Software Schmiede GmbH\\
+    \url{https://lokalesoftwareschmiede.de}
+}
 
 \begin{document}
 \tudotitlepage
