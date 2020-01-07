@@ -42,7 +42,7 @@
 
 \DeclareDocumentCommand \setLogo { m }
   {
-      \tl_set:Nn \l_tudocstitlepage_logo_tl {#1}
+      \tl_set:Nn \l__tudocstitlepage_logo_tl {#1}
   }
 
 \DeclareDocumentCommand \thesistype { m }
@@ -86,8 +86,7 @@
     \setSupervisorstring{Supervisors}
     \setCooperationstring{In~cooperation~with}
 }{}
-\setLogo{\includegraphics[width=8cm]{tud_logo_rgba}\\[\fill]}
-
+\setLogo{uni-logo}
 \newcommand{\tikztitlepage}{%
     \begin{titlepage}
         \begin{tikzpicture}[overlay, remember picture]
@@ -122,7 +121,7 @@
                 \@date
             \end{minipage}
         \end{textblock*}
-        \noindent \tl_use:N \l__tudocstitlepage_logo_tl
+        \noindent\includegraphics[width=8cm]{\l__tudocstitlepage_logo_tl}\\[\fill]
         %\vspace{15cm}
         \vfill
         \noindent\begin{minipage}{.55\textwidth}
